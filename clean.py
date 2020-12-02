@@ -20,7 +20,7 @@ from sklearn.cluster import KMeans
 from sklearn.linear_model import Ridge
 from sklearn.preprocessing import MinMaxScaler
 from sklearn.neighbors import KNeighborsClassifier
-from feature_engine import categorical_encoders as ce
+# from feature_engine import categorical_encoders as ce
 sns.set()
 
 class Loader():
@@ -289,7 +289,9 @@ class Standardize():
             return self.standrdX.transform(X,copy=True),self.standrdY.transform(Y,copy=True)
 
     def inverse_standarde_y(self,Y):
-        return self.standrdY.inverse_transform(Y)
+        y = self.standrdY.inverse_transform(Y)
+        y[y<0] = 0
+        return np.ceil(y).astype(int)
 
 class BuildDataset():
     def __init__(self,pickfields=None):
@@ -301,9 +303,9 @@ class BuildDataset():
         trainX, trainY = df_train.iloc[:, :-1].values, df_train['numPLikes'].values
         testX= df_test.values
         trainY = np.expand_dims(trainY, axis=1)
-        self.Ynorm = trainY
+        self.trainY = trainY
         self.standar.fit(trainX,trainY)
-        self.trainX,self.trainY= self.standar.transform(trainX,trainY)
+        self.trainX,self.Ynorm= self.standar.transform(trainX,trainY)
         self.testX = self.standar.transform(testX)
         self.testId = testId
 

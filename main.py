@@ -18,6 +18,7 @@ from util import saveResult
 if __name__ == "__main__":
     # training set and test set building
     builder = BuildDataset()
+    # X, Y,Ynorm,testX, testId, stander = builder.getData()
     X, Y,Ynorm,testX, testId, stander = builder.getData()
     # Ynorm is y after normalized, Y is the real integer data
     # trainX,trainY,evalX,evalY = train_test_split(X,Y,test_size=0.3,random_state=420)
@@ -32,7 +33,8 @@ if __name__ == "__main__":
     for train_index, val_index in kf.split(X):
         # print("TRAIN:", train_index, "TEST:", val_index)
         X_train, X_val = X[train_index,:], X[val_index,:]
-        y_train, y_val = Y[train_index], Ynorm[val_index]
+        y_train, y_val = Ynorm[train_index], Y[val_index]
+        # y_train, y_val = Y[train_index], Y[val_index]
 
         model.fit(X_train,y_train)
         # predict

@@ -65,7 +65,10 @@ class MLP():
 
     def predict(self,X):
         ypred = self.model.predict(X)
-        return np.ceil(ypred)
+        # ypred[ypred<0] = 0 # force the negative to be 0
+        # y = np.ceil(ypred)
+        # return y.astype(int)
+        return ypred
 
     def savemodel(self):
         self.model.save('%s/model/model.h5'%getBasePath())
